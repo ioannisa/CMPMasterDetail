@@ -28,20 +28,33 @@ import androidx.compose.ui.unit.dp
 import cmpmasterdetail.composeapp.generated.resources.Res
 import cmpmasterdetail.composeapp.generated.resources.compose_multiplatform
 import coil3.compose.rememberAsyncImagePainter
+import eu.anifantakis.cmpmasterdetail.core.presentation.ObserveEffects
 import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.UIConst
 import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.components.AppBackground
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.PullToRefreshList
 import eu.anifantakis.cmpmasterdetail.movies.domain.Movie
+import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.MovieId
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MoviesListScreenRoot(
+    onNavigateToMovieDetails: (MovieId) -> Unit,
     viewModel: MoviesListViewModel = koinViewModel()
 ) {
+    ObserveEffects(viewModel.events) { effect ->
+        when (effect) {
+            is MoviesListEffect.GotoMovieDetails -> {
+                if (effect.movieId > 0)
+                    onNavigateToMovieDetails(effect.movieId)
+            }
+            else -> { }
+        }
+    }
+
     MoviesListScreen(
         state = viewModel.state,
-        onAction = {}
+        onAction = viewModel::onAction
     )
 }
 

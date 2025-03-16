@@ -11,7 +11,7 @@ import org.koin.compose.viewmodel.koinViewModel
  * Allow for shared ViewModel within nested navigation using Koin
  */
 @Composable
-private inline fun <reified T: ViewModel> NavBackStackEntry.sharedKoinViewModel(
+inline fun <reified T: ViewModel> NavBackStackEntry.sharedKoinViewModel(
     navController: NavController
 ): T {
     val navGraphRoute = destination.parent?.route ?: return koinViewModel<T>()
