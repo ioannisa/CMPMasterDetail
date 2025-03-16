@@ -7,9 +7,11 @@ import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.scaffold.Scaffol
 import eu.anifantakis.cmpmasterdetail.movies.data.MoviesRepositoryImpl
 import eu.anifantakis.cmpmasterdetail.movies.data.database.MoviesDatabase
 import eu.anifantakis.cmpmasterdetail.movies.data.database.MoviesDatabaseFactory
+import eu.anifantakis.cmpmasterdetail.movies.data.datasource.LocalMoviesDataSourceImpl
 import eu.anifantakis.cmpmasterdetail.movies.data.datasource.RemoteMoviesDataSourceImpl
 import eu.anifantakis.cmpmasterdetail.movies.data.networking.MoviesHttpClient
 import eu.anifantakis.cmpmasterdetail.movies.domain.MoviesRepository
+import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.LocalMoviesDataSource
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.RemoteMoviesDataSource
 import eu.anifantakis.cmpmasterdetail.movies.presentation.MoviesListViewModel
 import org.koin.core.module.Module
@@ -38,7 +40,10 @@ val sharedModule = module {
     }
     single { get<MoviesDatabase>().moviesDao }
 
+    // Remote+Local Movies Datasource
     singleOf(::RemoteMoviesDataSourceImpl).bind<RemoteMoviesDataSource>()
+    singleOf(::LocalMoviesDataSourceImpl).bind<LocalMoviesDataSource>()
+    // Movies Repository
     singleOf(::MoviesRepositoryImpl).bind<MoviesRepository>()
 
     viewModelOf(::ScaffoldViewModel)

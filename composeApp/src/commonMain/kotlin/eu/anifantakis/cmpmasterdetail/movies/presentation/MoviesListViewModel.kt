@@ -1,7 +1,6 @@
 package eu.anifantakis.cmpmasterdetail.movies.presentation
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.anifantakis.cmpmasterdetail.core.presentation.toComposeState
@@ -9,13 +8,13 @@ import eu.anifantakis.cmpmasterdetail.core.presentation.ui.UiText
 import eu.anifantakis.cmpmasterdetail.movies.domain.Movie
 import eu.anifantakis.cmpmasterdetail.movies.domain.MoviesRepository
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 sealed interface MoviesListIntent {
     data object LoadMovies : MoviesListIntent
@@ -41,7 +40,7 @@ class MoviesListViewModel(
     private var _state = MutableStateFlow(MoviesListState())
     val state by _state
         .onStart {
-            getMovies()
+            loadMovies()
         }
         .stateIn(
             viewModelScope,
@@ -54,15 +53,34 @@ class MoviesListViewModel(
     private val eventChannel = Channel<MoviesListEffect>()
     val events = eventChannel.receiveAsFlow()
 
-    private fun getMovies() {
+    private fun loadMovies() {
+        loadFromDB()
+        networkCall()
+        //loadOnlyFromNetwork()
+    }
+
+    private fun loadFromDB() {
         viewModelScope.launch {
-            val movies = repository.fetchMovies()
-            _state.update {
-                it.copy(
-                    isLoading = false,
-                    movies = movies
-                )
-            }
+            _state.update { it.copy(isLoading = true) }
+            repository.getMovies()
+                .collect { movies ->
+                    _state.update { it.copy(movies = movies) }
+                }
+
+            _state.update { it.copy(isLoading = false) }
+        }
+    }
+
+    private fun networkCall() {
+        viewModelScope.launch {
+            repository.fetchMovies()
+        }
+    }
+
+    private fun loadOnlyFromNetwork() {
+        viewModelScope.launch {
+            val movies = repository.fetchJustFromAPI()
+            _state.update { it.copy(movies = movies, isLoading = false) }
         }
     }
 }

@@ -9,23 +9,28 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MoviesDao {
     @Upsert
-    suspend fun upsertMovie(movie: MovieEntity)
+    suspend fun upsertMovie(movie: MovieEntity): Long
 
     @Upsert
-    suspend fun upsertMovies(movies: List<MovieEntity>)
+    suspend fun upsertMovies(movies: List<MovieEntity>): List<Long>
 
+    // For iOS, we can't use Flow directly
     @Query("SELECT * FROM MovieEntity ORDER BY voteAverage DESC")
-    fun getRuns(): Flow<List<MovieEntity>>
+    suspend fun getMovies(): List<MovieEntity>
+
+    // For Android, we can keep Flow in a separate function
+    @Query("SELECT * FROM MovieEntity ORDER BY voteAverage DESC")
+    fun getMoviesFlow(): Flow<List<MovieEntity>>
 
     @Query("DELETE FROM MovieEntity WHERE id = :id")
-    fun deleteMovie(id: Int)
+    suspend fun deleteMovie(id: Int): Int
 
     @Delete
-    suspend fun deleteMovie(movie: MovieEntity)
+    suspend fun deleteMovie(movie: MovieEntity): Int
 
     @Query("DELETE FROM MovieEntity")
-    fun deleteAllMovies()
+    suspend fun deleteAllMovies(): Int
 
     @Delete
-    suspend fun deleteMovies(movies: List<MovieEntity>)
+    suspend fun deleteMovies(movies: List<MovieEntity>): Int
 }

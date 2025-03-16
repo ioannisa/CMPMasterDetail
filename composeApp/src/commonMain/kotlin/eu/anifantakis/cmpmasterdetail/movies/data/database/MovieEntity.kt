@@ -6,7 +6,7 @@ import kotlinx.datetime.LocalDate
 
 @Entity
 data class MovieEntity(
-    @PrimaryKey(autoGenerate = false) val id: String,
+    @PrimaryKey(autoGenerate = false) val id: Int,
     val title: String,
     val overview: String,
     val releaseDate: LocalDate?,
