@@ -9,8 +9,6 @@ import eu.anifantakis.cmpmasterdetail.movies.domain.MoviesRepository
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.LocalMoviesDataSource
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.MovieId
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.RemoteMoviesDataSource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 
 class MoviesRepositoryImpl(
