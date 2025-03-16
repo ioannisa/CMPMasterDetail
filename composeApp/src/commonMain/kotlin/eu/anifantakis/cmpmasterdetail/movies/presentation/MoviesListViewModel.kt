@@ -54,26 +54,22 @@ class MoviesListViewModel(
     val events = eventChannel.receiveAsFlow()
 
     private fun loadMovies() {
-        loadFromDB()
-        networkCall()
+        loadOfflineFirstAndObserve()
         //loadOnlyFromNetwork()
     }
 
-    private fun loadFromDB() {
+    private fun loadOfflineFirstAndObserve() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             repository.getMovies()
                 .collect { movies ->
                     _state.update { it.copy(movies = movies) }
                 }
-
-            _state.update { it.copy(isLoading = false) }
         }
-    }
 
-    private fun networkCall() {
         viewModelScope.launch {
             repository.fetchMovies()
+            _state.update { it.copy(isLoading = false) }
         }
     }
 
