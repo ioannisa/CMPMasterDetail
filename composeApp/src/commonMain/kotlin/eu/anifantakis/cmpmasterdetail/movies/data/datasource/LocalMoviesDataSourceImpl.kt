@@ -10,18 +10,16 @@ import eu.anifantakis.cmpmasterdetail.movies.domain.Movie
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.LocalMoviesDataSource
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.MovieId
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class LocalMoviesDataSourceImpl(
     private val moviesDao: MoviesDao
 ): LocalMoviesDataSource {
     override fun getMovies(): Flow<List<Movie>> {
-        // Use the flow builder to create a Flow from the suspend function
-        return flow {
-            val movies = moviesDao.getMovies().map { it.toMovie() }
-            emit(movies)
-        }
+        return moviesDao.getMovies()
+            .map { movieEntities ->
+                movieEntities.map { it.toMovie() }
+            }
     }
 
     override suspend fun upsertMovie(movie: Movie): DataResult<MovieId, DataError.Local> {
