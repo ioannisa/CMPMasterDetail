@@ -1,9 +1,12 @@
 package eu.anifantakis.cmpmasterdetail.di
 
 import CMPMasterDetail.composeApp.BuildConfig
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.scaffold.ScaffoldViewModel
 import eu.anifantakis.cmpmasterdetail.movies.data.MoviesRepositoryImpl
+import eu.anifantakis.cmpmasterdetail.movies.data.database.MoviesDatabase
+import eu.anifantakis.cmpmasterdetail.movies.data.database.MoviesDatabaseFactory
 import eu.anifantakis.cmpmasterdetail.movies.data.datasource.RemoteMoviesDataSourceImpl
 import eu.anifantakis.cmpmasterdetail.movies.data.networking.MoviesHttpClient
 import eu.anifantakis.cmpmasterdetail.movies.domain.MoviesRepository
@@ -28,6 +31,12 @@ val sharedModule = module {
         )
     }
 
+    single {
+        get<MoviesDatabaseFactory>().create()
+            .setDriver(BundledSQLiteDriver())
+            .build()
+    }
+    single { get<MoviesDatabase>().moviesDao }
 
     singleOf(::RemoteMoviesDataSourceImpl).bind<RemoteMoviesDataSource>()
     singleOf(::MoviesRepositoryImpl).bind<MoviesRepository>()
