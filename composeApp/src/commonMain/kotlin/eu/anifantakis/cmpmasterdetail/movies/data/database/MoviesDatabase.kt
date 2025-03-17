@@ -4,6 +4,7 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import eu.anifantakis.cmpmasterdetail.movies.data.database.converters.LocalDateTimeZoneCurrentToLongTypeConverter
 import eu.anifantakis.cmpmasterdetail.movies.data.database.converters.StringListTypeConverter
 
 @Database(
@@ -11,7 +12,8 @@ import eu.anifantakis.cmpmasterdetail.movies.data.database.converters.StringList
     version = 1
 )
 @TypeConverters(
-    StringListTypeConverter::class
+    StringListTypeConverter::class,
+    LocalDateTimeZoneCurrentToLongTypeConverter::class
 )
 @ConstructedBy(MoviesDatabaseConstructor::class)
 abstract class MoviesDatabase: RoomDatabase() {
