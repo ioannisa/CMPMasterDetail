@@ -3,6 +3,7 @@ package eu.anifantakis.cmpmasterdetail.movies.presentation
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.anifantakis.cmpmasterdetail.core.data.preferences.Vault
 import eu.anifantakis.cmpmasterdetail.core.presentation.toComposeState
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.UiText
 import eu.anifantakis.cmpmasterdetail.movies.domain.Movie
@@ -35,13 +36,23 @@ data class MoviesListState(
 )
 
 class MoviesListViewModel(
-    private val repository: MoviesRepository
+    private val repository: MoviesRepository,
+    private val vault: Vault
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(MoviesListState())
     val state by _state
         .onStart {
             onAction(MoviesListIntent.LoadMovies)
+
+            // TESTING VAULT START
+            vault.put("test1", "ABCDEFG")
+            val test1 = vault.get("test1", "DEFAULT 1")
+            val test2 = vault.get("test2", "DEFAULT 2")
+
+            println("TEST1 IS $test1")
+            println("TEST2 IS $test2")
+            // TESTING VAULT END
         }
         .stateIn(
             viewModelScope,

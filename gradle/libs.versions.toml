@@ -30,6 +30,7 @@ kotlinSerialization = "1.8.0"
 gmazzo-buildconfig-version = "5.5.1"
 kotlinx-datetime = "0.6.2"
 foundationAndroid = "1.7.8"
+cryptography = "0.4.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -83,6 +84,16 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 # kermit logging
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
+# Encryption
+provider-core = {group = "dev.whyoleg.cryptography", name = "cryptography-core", version.ref = "cryptography" }
+provider-apple = {group = "dev.whyoleg.cryptography", name = "cryptography-provider-apple", version.ref = "cryptography" }
+provider-base = {group = "dev.whyoleg.cryptography", name = "cryptography-provider-base", version.ref = "cryptography" }
+provider-jdk = {group = "dev.whyoleg.cryptography", name = "cryptography-provider-jdk", version.ref = "cryptography" }
+provider-openssl3-api = {group = "dev.whyoleg.cryptography", name = "cryptography-provider-openssl3-api", version.ref = "cryptography" }
+provider-openssl3-prebuilt = {group = "dev.whyoleg.cryptography", name = "cryptography-provider-openssl3-prebuilt", version.ref = "cryptography" }
+provider-openssl3-shared = {group = "dev.whyoleg.cryptography", name = "cryptography-provider-openssl3-shared", version.ref = "cryptography" }
+provider-webcrypto = {group = "dev.whyoleg.cryptography", name = "cryptography-provider-webcrypto", version.ref = "cryptography" }
+
 # DateTime
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
@@ -90,6 +101,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -1,9 +1,6 @@
-import com.android.build.api.dsl.BuildType
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.internal.builtins.StandardNames.FqNames.target
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -57,6 +54,8 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
             implementation(libs.ktor.client.okhttp)
+
+            implementation(libs.provider.jdk)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -81,11 +80,19 @@ kotlin {
 
             implementation(libs.kermit)
             implementation(libs.kotlinx.datetime)
+
+            implementation(libs.datastore)
+            implementation(libs.datastore.preferences)
+
+            implementation(libs.provider.core)
+            implementation(libs.provider.base)
+
             implementation("io.github.bvantur:inspektify-ktor3:1.0.0-beta08")
         }
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.provider.openssl3.prebuilt)
         }
 
         dependencies {

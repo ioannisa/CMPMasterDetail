@@ -16,19 +16,20 @@ class MoviesRepositoryImpl(
     private val localDataSource: LocalMoviesDataSource
 ) : MoviesRepository{
 
+    override suspend fun fetchJustFromAPI(): List<Movie> {
+        return when (val result = remoteDataSource.getMovies()) {
+            is DataResult.Success -> { result.data }
+            is DataResult.Failure -> { emptyList() }
+        }
+    }
+
+
     // Fetch from Ktor -> Upsert on ROOM
     override suspend fun fetchMovies(): EmptyDataResult<DataError> {
          return when (val result = remoteDataSource.getMovies()) {
              is DataResult.Success -> { localDataSource.upsertMovies(result.data).asEmptyDataResult() }
              is DataResult.Failure -> { result.asEmptyDataResult() }
          }
-    }
-
-    override suspend fun fetchJustFromAPI(): List<Movie> {
-        return when (val result = remoteDataSource.getMovies()) {
-            is DataResult.Success -> { result.data }
-            is DataResult.Failure -> { emptyList() }
-        }
     }
 
     // Fetch from ROOM
