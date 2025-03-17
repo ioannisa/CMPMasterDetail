@@ -1,9 +1,11 @@
 package eu.anifantakis.cmpmasterdetail.movies
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +55,16 @@ fun NavGraphBuilder.moviesGraph(navController: NavHostController, paddingValues:
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "DETAIL SCREEN \n\n ${movieId}"
-                )
+                Column {
+                    Text(
+                        text = "DETAIL SCREEN \n\n ${movieId}"
+                    )
+                    Button(
+                        onClick = { navController.popBackStack() }
+                    ) {
+                        Text("BACK")
+                    }
+                }
             }
         }
     }
