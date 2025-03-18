@@ -3,6 +3,7 @@ package eu.anifantakis.cmpmasterdetail.movies.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -107,9 +107,9 @@ private fun MoviesListScreen(
 
 @Composable
 fun RowItem(movie: Movie, modifier: Modifier = Modifier) {
-    Card(
+    Box (
         modifier = modifier.
-        padding(vertical = 4.dp)
+            padding(vertical = 4.dp)
     ) {
         Row {
             ThumbnailLoader(imagePath = movie.posterPath)
@@ -122,13 +122,18 @@ fun RowItem(movie: Movie, modifier: Modifier = Modifier) {
                 ,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
+
                 Text(
                     text = movie.title,
                     style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary
 
                 )
 
-                Text(text = movie.releaseDate?.year.toString())
+                Text(
+                    text = movie.releaseDate?.year.toString(),
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         }
     }
