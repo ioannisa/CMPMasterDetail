@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.dp
 
 object UIConst {
 
-    val padding = 16.dp
+    val paddingRegular = 16.dp
     val paddingDouble = 32.dp
     val paddingSmall = 8.dp
     val paddingExtraSmall = 4.dp

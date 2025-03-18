@@ -83,8 +83,8 @@ class MoviesListViewModel(
     }
 
     private fun loadMovies() {
-        loadOfflineFirstAndObserve()
-        //loadOnlyFromNetwork()
+        //loadOfflineFirstAndObserve()
+        loadOnlyFromNetwork()
     }
 
     private fun loadOfflineFirstAndObserve() {

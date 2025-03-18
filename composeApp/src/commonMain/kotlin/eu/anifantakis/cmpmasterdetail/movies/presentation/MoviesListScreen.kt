@@ -24,13 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import cmpmasterdetail.composeapp.generated.resources.Poppins_Bold
-import cmpmasterdetail.composeapp.generated.resources.Poppins_Italic
-import cmpmasterdetail.composeapp.generated.resources.Poppins_Regular
 import cmpmasterdetail.composeapp.generated.resources.Res
 import cmpmasterdetail.composeapp.generated.resources.compose_multiplatform
 import coil3.compose.rememberAsyncImagePainter
@@ -41,7 +35,6 @@ import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.components.
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.PullToRefreshList
 import eu.anifantakis.cmpmasterdetail.movies.domain.Movie
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.MovieId
-import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -81,35 +74,10 @@ private fun MoviesListScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(UIConst.padding),
+                    .padding(UIConst.paddingRegular),
                 verticalArrangement = Arrangement.spacedBy(UIConst.paddingSmall)
             ) {
                 var isRefeshing by remember { mutableStateOf(false) }
-
-
-                val font = Font(
-                    resource = Res.font.Poppins_Bold,
-                    weight = FontWeight.Bold,
-                    style = FontStyle.Normal
-                )
-                val font2 = Font(
-                    resource = Res.font.Poppins_Regular,
-                    weight = FontWeight.Normal,
-                    style = FontStyle.Normal
-                )
-                val font3 = Font(
-                    resource = Res.font.Poppins_Italic,
-                    weight = FontWeight.Normal,
-                    style = FontStyle.Italic
-                )
-
-                val famiy = FontFamily(font, font2, font3)
-
-
-                Text(
-                    text = "ABCDEFG hijklmn opqrst uvw",
-                    fontFamily = famiy
-                )
 
 
 
