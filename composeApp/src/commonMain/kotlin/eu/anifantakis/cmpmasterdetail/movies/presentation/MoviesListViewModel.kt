@@ -46,7 +46,7 @@ class MoviesListViewModel(
             onAction(MoviesListIntent.LoadMovies)
 
             // TESTING VAULT START
-            vault.put("test1", "ABCDEFG")
+            //vault.put("test1", "ABCDEFG")
             val test1 = vault.get("test1", "DEFAULT 1")
             val test2 = vault.get("test2", "DEFAULT 2")
 
