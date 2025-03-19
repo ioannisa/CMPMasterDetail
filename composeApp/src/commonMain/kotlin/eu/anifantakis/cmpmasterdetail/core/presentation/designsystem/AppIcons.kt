@@ -1,11 +1,17 @@
 package eu.anifantakis.cmpmasterdetail.core.presentation.designsystem
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -18,6 +24,14 @@ object AppIcons {
     val appLoco: Painter
         @Composable
         get() = painterResource(Res.drawable.compose_multiplatform)
+
+    val backArrow: ImageVector
+        @Composable
+        get() = Icons.AutoMirrored.Filled.ArrowBack
+
+    val settings: ImageVector
+        @Composable
+        get() = Icons.Default.Settings
 
     val check: ImageVector
         @Composable
@@ -35,21 +49,21 @@ object AppIcons {
         @Composable
         get() = Icons.Outlined.Lock
 
-//    val visibilityOn: ImageVector
-//        @Composable
-//        get() = androidx.compose.material.icons.Icons.Outlined.Visibility
-//
-//    val visibilityOff: ImageVector
-//        @Composable
-//        get() = androidx.compose.material.icons.Icons.Outlined.VisibilityOff
-//
-//    val restaurant: ImageVector
-//        @Composable
-//        get() = androidx.compose.material.icons.Icons.Outlined.Restaurant
-//
-//    val fastFood: ImageVector
-//        @Composable
-//        get() = androidx.compose.material.icons.Icons.Outlined.Fastfood
+    val visibilityOn: ImageVector
+        @Composable
+        get() = Icons.Outlined.Visibility
+
+    val visibilityOff: ImageVector
+        @Composable
+        get() = Icons.Outlined.VisibilityOff
+
+    val restaurant: ImageVector
+        @Composable
+        get() = Icons.Outlined.Restaurant
+
+    val fastFood: ImageVector
+        @Composable
+        get() = Icons.Outlined.Fastfood
 
     val person: ImageVector
         @Composable

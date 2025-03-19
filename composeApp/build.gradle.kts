@@ -88,6 +88,8 @@ kotlin {
             implementation(libs.provider.core)
             implementation(libs.provider.base)
 
+            implementation(libs.material.icons.extended)
+
             implementation("io.github.bvantur:inspektify-ktor3:1.0.0-beta08")
         }
 
