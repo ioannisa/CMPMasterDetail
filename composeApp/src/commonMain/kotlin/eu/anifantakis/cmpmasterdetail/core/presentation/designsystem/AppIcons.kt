@@ -2,6 +2,7 @@ package eu.anifantakis.cmpmasterdetail.core.presentation.designsystem
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CarRental
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Settings
@@ -32,6 +33,10 @@ object AppIcons {
     val settings: ImageVector
         @Composable
         get() = Icons.Default.Settings
+
+    val car: ImageVector
+        @Composable
+        get() = Icons.Default.CarRental
 
     val check: ImageVector
         @Composable

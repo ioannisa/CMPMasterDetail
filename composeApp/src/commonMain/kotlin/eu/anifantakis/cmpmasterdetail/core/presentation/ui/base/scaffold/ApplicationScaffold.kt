@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.AppTopAppBar
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -20,7 +19,7 @@ fun ApplicationScaffold(
 
     Scaffold(
         topBar = { if (title != null) AppTopAppBar(title, onBackPress) },
-        //bottomBar = { AppBottomNav(navController) }
+        bottomBar = { AppBottomNavBar(navController) }
     ) { paddingValues ->
         content(paddingValues)
     }

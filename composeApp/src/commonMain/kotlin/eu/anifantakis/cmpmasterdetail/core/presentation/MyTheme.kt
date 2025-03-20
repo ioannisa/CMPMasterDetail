@@ -17,10 +17,10 @@ import cmpmasterdetail.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.Font
 
 object AppColor {
-    val colorBrightGrey = Color(0xFFC5C5C5)
-    val colorGrey = Color(0xFFC4C4C4)
-    val colorDarkGrey = Color(0xFF181818)
-    val colorYellow = Color(0xFFFFC000)
+    val BrightGrey = Color(0xFFC5C5C5)
+    val Grey = Color(0xFFC4C4C4)
+    val DarkGrey = Color(0xFF181818)
+    val Yellow = Color(0xFFFFC000)
 }
 
 @Composable
@@ -58,15 +58,15 @@ fun MyAppTheme(content: @Composable () -> Unit) {
     )
 
     val colorScheme = MaterialTheme.colorScheme.copy(
-        primary = AppColor.colorBrightGrey,
-        onPrimary = AppColor.colorDarkGrey,
-        secondary = AppColor.colorGrey,
-        onSecondary = AppColor.colorDarkGrey,
-        tertiary = AppColor.colorYellow,
-        onTertiary = AppColor.colorDarkGrey,
-        surface = AppColor.colorDarkGrey,
-        onSurface = AppColor.colorDarkGrey,
-        background = AppColor.colorDarkGrey,
+        primary = AppColor.BrightGrey,
+        onPrimary = AppColor.DarkGrey,
+        secondary = AppColor.Grey,
+        onSecondary = AppColor.DarkGrey,
+        tertiary = AppColor.Yellow,
+        onTertiary = AppColor.DarkGrey,
+        surface = AppColor.DarkGrey,
+        onSurface = AppColor.DarkGrey,
+        background = AppColor.DarkGrey,
     )
 
     MaterialTheme(

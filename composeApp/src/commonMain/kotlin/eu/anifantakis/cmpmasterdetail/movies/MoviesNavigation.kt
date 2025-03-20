@@ -23,11 +23,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface MoviesNavType {
-    @Serializable
-    data object MoviesList: MoviesNavType
-
-    @Serializable
-    data class MovieDetail(val movieId: MovieId): MoviesNavType
+    @Serializable data object MoviesList: MoviesNavType
+    @Serializable data class MovieDetail(val movieId: MovieId): MoviesNavType
 }
 
 fun NavGraphBuilder.moviesGraph(navController: NavHostController, paddingValues: PaddingValues) {

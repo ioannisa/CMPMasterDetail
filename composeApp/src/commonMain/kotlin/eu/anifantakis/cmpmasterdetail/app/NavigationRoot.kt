@@ -7,10 +7,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.scaffold.ApplicationScaffold
 import eu.anifantakis.cmpmasterdetail.movies.moviesGraph
+import eu.anifantakis.cmpmasterdetail.setup.setupGraph
 import kotlinx.serialization.Serializable
 
+@Serializable
 sealed interface NavGraph {
     @Serializable data object Movies: NavGraph
+    @Serializable data object Setup: NavGraph
 }
 
 @Composable
@@ -26,6 +29,7 @@ fun NavigationRoot(
             )
         ) {
             moviesGraph(navController, scaffoldPadding)
+            setupGraph(navController, scaffoldPadding)
         }
     }
 }
