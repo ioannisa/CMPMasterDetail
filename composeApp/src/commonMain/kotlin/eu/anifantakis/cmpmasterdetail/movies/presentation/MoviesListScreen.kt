@@ -89,7 +89,7 @@ private fun MoviesListScreen(
                     title = "Movies",
                     onClick = {
                         println("MultiTap Secret Triggered")
-                        bottomBarState.isVisible.value = !bottomBarState.isVisible.value
+                        bottomBarState.toggle()
                     }
                 )
 
