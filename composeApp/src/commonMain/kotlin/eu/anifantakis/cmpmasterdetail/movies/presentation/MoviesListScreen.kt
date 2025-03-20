@@ -2,6 +2,7 @@ package eu.anifantakis.cmpmasterdetail.movies.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,13 +32,16 @@ import cmpmasterdetail.composeapp.generated.resources.compose_multiplatform
 import coil3.compose.rememberAsyncImagePainter
 import eu.anifantakis.cmpmasterdetail.core.presentation.MyAppTheme
 import eu.anifantakis.cmpmasterdetail.core.presentation.ObserveEffects
+import eu.anifantakis.cmpmasterdetail.core.presentation.composition_locals.LocalBottomBarState
 import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.UIConst
 import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.components.AppBackground
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.PullToRefreshList
 import eu.anifantakis.cmpmasterdetail.movies.domain.Movie
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.MovieId
+import kotlinx.datetime.Clock.System
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.math.abs
 
 @Composable
 fun MoviesListScreenRoot(
@@ -78,9 +83,15 @@ private fun MoviesListScreen(
                 verticalArrangement = Arrangement.spacedBy(UIConst.paddingSmall)
             ) {
                 var isRefeshing by remember { mutableStateOf(false) }
+                val bottomBarState = LocalBottomBarState.current
 
-
-
+                MultiTapTitle(
+                    title = "Movies",
+                    onClick = {
+                        println("MultiTap Secret Triggered")
+                        bottomBarState.isVisible.value = !bottomBarState.isVisible.value
+                    }
+                )
 
                 PullToRefreshList(isRefreshing = isRefeshing, onRefresh = {
                     isRefeshing = true
@@ -157,5 +168,41 @@ fun ThumbnailLoader(imagePath: String?) {
         contentScale = ContentScale.Crop,
         alignment = Alignment.TopCenter,
         modifier = Modifier.size(120.dp)
+    )
+}
+
+@Composable
+fun MultiTapTitle(
+    title: String,
+    onClick: () -> Unit
+) {
+    var prvTapTime by remember { mutableStateOf<Long>(0) }
+    var tapCount by remember { mutableIntStateOf(0) }
+
+    val interactionSource = remember { MutableInteractionSource() }
+    Text(
+        text = title,
+        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                val currentTime = System.now().toEpochMilliseconds()
+
+                // Remove taps that are older than 1 second from the latest tap
+                val thresholdTime = prvTapTime - 1000L // 1000ms = 1 second
+                if (abs(currentTime - prvTapTime) < 1000) {
+                    tapCount++
+                    if (tapCount >= 7) {
+                        tapCount = 1
+                        onClick()
+                    }
+                } else {
+                    tapCount = 1
+                }
+                prvTapTime = currentTime
+            }
     )
 }
