@@ -6,8 +6,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -16,6 +18,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import eu.anifantakis.cmpmasterdetail.app.NavGraph
 import eu.anifantakis.cmpmasterdetail.core.presentation.AppColor
+import eu.anifantakis.cmpmasterdetail.core.presentation.composition_locals.LocalBottomBarState
 import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.AppIcons
 import eu.anifantakis.cmpmasterdetail.core.presentation.popAndNavigate
 
@@ -44,46 +47,51 @@ data class BottomNavigationItem(
 
 @Composable
 fun AppBottomNavBar(navController: NavHostController) {
+    val bottomBarState = LocalBottomBarState.current
+    val navigationSelectedItem by bottomBarState.selectedIndex
 
-    var navigationSelectedItem by rememberSaveable { mutableIntStateOf(0) }
+    // Get the navigation items outside the NavigationBar for use in the effect
+    val navigationItems = BottomNavigationItem().bottomNavigationItems()
+
+    // Track whether navigation is in progress to prevent loops
+    val isNavigating = rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(navigationSelectedItem) {
+        // Only proceed if not already navigating
+        if (!isNavigating.value && navigationSelectedItem >= 0 && navigationSelectedItem < navigationItems.size) {
+            isNavigating.value = true
+
+            val destination = navigationItems[navigationSelectedItem].destination
+            navController.graph.findStartDestination().route?.let { startRoute ->
+                navController.popAndNavigate(
+                    popTo = startRoute,
+                    navigate = destination
+                )
+            }
+
+            // Reset navigation flag
+            isNavigating.value = false
+        }
+    }
 
     NavigationBar(
         containerColor = AppColor.DarkGrey,
         contentColor = AppColor.BrightGrey,
         tonalElevation = 4.dp
     ) {
-        BottomNavigationItem().bottomNavigationItems().forEachIndexed { index, navigationItem ->
-
-            //iterating all items with their respective indexes
+        navigationItems.forEachIndexed { index, navigationItem ->
             NavigationBarItem(
                 selected = index == navigationSelectedItem,
-                label = {
-                    Text(navigationItem.label)
-                },
+                label = { Text(navigationItem.label) },
                 icon = {
                     navigationItem.icon?.let { icon ->
                         Icon(imageVector = icon, contentDescription = navigationItem.label)
                     }
                 },
                 onClick = {
-                    navigationSelectedItem = index
-                    navController.graph.findStartDestination().route?.let {
-                        navController.popAndNavigate(
-                            popTo = it,
-                            navigate = navigationItem.destination
-                        )
-                    }
-
-//                    navigationSelectedItem = index
-//                    navController.navigate(navigationItem.destination) {
-//                        navController.graph.findStartDestination().route?.let {
-//                            popUpTo(it) {
-//                                saveState = true
-//                            }
-//                            launchSingleTop = true
-//                            restoreState = true
-//                        }
-//                    }
+                    // Now onClick only changes the selected index
+                    // The LaunchedEffect above will handle the actual navigation
+                    bottomBarState.selectTab(index)
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = AppColor.BrightGrey,
