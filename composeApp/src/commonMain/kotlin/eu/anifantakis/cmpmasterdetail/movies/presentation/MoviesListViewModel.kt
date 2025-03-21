@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 
 sealed interface MoviesListIntent {
     data object LoadMovies : MoviesListIntent
+    data object RefreshMovies : MoviesListIntent
     data class SelectMovie(val movieId: MovieId) : MoviesListIntent
 }
 
@@ -31,6 +32,7 @@ sealed interface MoviesListEffect {
 
 data class MoviesListState(
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val movies: List<Movie> = emptyList(),
     val selectedMovie: Movie? = null,
 )
@@ -68,6 +70,7 @@ class MoviesListViewModel(
     fun onAction(intent: MoviesListIntent) {
         when (intent) {
             MoviesListIntent.LoadMovies -> loadMovies()
+            MoviesListIntent.RefreshMovies -> loadMovies(shouldRefresh = true)
             is MoviesListIntent.SelectMovie -> selectMovie(intent.movieId)
         }
     }
@@ -82,14 +85,18 @@ class MoviesListViewModel(
         }
     }
 
-    private fun loadMovies() {
-        //loadOfflineFirstAndObserve()
-        loadOnlyFromNetwork()
+    private fun loadMovies(shouldRefresh: Boolean = false) {
+        loadOfflineFirstAndObserve(shouldRefresh)
+        //loadOnlyFromNetwork(shouldRefresh)
     }
 
-    private fun loadOfflineFirstAndObserve() {
+    private fun loadOfflineFirstAndObserve(shouldRefresh: Boolean = false) {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+            _state.update { it.copy(
+                isRefreshing = shouldRefresh,
+                isLoading = !shouldRefresh
+            ) }
+
             repository.getMovies()
                 .collect { movies ->
                     _state.update { it.copy(movies = movies) }
@@ -98,14 +105,27 @@ class MoviesListViewModel(
 
         viewModelScope.launch {
             repository.fetchMovies()
-            _state.update { it.copy(isLoading = false) }
+            _state.update {
+                if (shouldRefresh) it.copy(isRefreshing = false)
+                else it.copy(isLoading = false)
+            }
         }
     }
 
-    private fun loadOnlyFromNetwork() {
+    private fun loadOnlyFromNetwork(shouldRefresh: Boolean = false) {
         viewModelScope.launch {
+            _state.update { it.copy(
+                isRefreshing = shouldRefresh,
+                isLoading = !shouldRefresh
+            ) }
+
             val movies = repository.fetchJustFromAPI()
-            _state.update { it.copy(movies = movies, isLoading = false) }
+
+            _state.update { it.copy(
+                movies = movies,
+                isRefreshing = if (shouldRefresh) false else it.isRefreshing,
+                isLoading = if (shouldRefresh) it.isLoading else false
+            ) }
         }
     }
 }

@@ -82,7 +82,6 @@ private fun MoviesListScreen(
                     .padding(UIConst.paddingRegular),
                 verticalArrangement = Arrangement.spacedBy(UIConst.paddingSmall)
             ) {
-                var isRefeshing by remember { mutableStateOf(false) }
                 val bottomBarState = LocalBottomBarState.current
 
                 MultiTapTitle(
@@ -93,8 +92,8 @@ private fun MoviesListScreen(
                     }
                 )
 
-                PullToRefreshList(isRefreshing = isRefeshing, onRefresh = {
-                    isRefeshing = true
+                PullToRefreshList(isRefreshing = state.isRefreshing, onRefresh = {
+                    onAction(MoviesListIntent.RefreshMovies)
                 }) {
                     LazyColumn {
                         items(
