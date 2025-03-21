@@ -215,7 +215,7 @@ fun SetupScreen(
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
                                         text = tabItem.title,
-                                        fontSize = 14.sp,
+                                        fontSize = 12.sp,
                                         color = if (selectedTabIndex == index) AppColor.White else AppColor.MidGrey
                                     )
                                 }
