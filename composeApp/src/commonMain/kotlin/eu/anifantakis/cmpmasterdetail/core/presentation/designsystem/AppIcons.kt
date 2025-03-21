@@ -2,7 +2,6 @@ package eu.anifantakis.cmpmasterdetail.core.presentation.designsystem
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CarRental
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Settings
@@ -17,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import cmpmasterdetail.composeapp.generated.resources.Res
+import cmpmasterdetail.composeapp.generated.resources.car
 import cmpmasterdetail.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
 
@@ -26,6 +26,10 @@ object AppIcons {
         @Composable
         get() = painterResource(Res.drawable.compose_multiplatform)
 
+    val car: Painter
+        @Composable
+        get() = painterResource(Res.drawable.car)
+
     val backArrow: ImageVector
         @Composable
         get() = Icons.AutoMirrored.Filled.ArrowBack
@@ -33,10 +37,6 @@ object AppIcons {
     val settings: ImageVector
         @Composable
         get() = Icons.Default.Settings
-
-    val car: ImageVector
-        @Composable
-        get() = Icons.Default.CarRental
 
     val check: ImageVector
         @Composable

@@ -8,10 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -23,12 +22,12 @@ import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.AppIcons
 import eu.anifantakis.cmpmasterdetail.core.presentation.popAndNavigate
 
 data class BottomNavigationItem(
-    val label : String = "",
-    val icon : ImageVector? = null,
-    val destination : NavGraph = NavGraph.Setup
+    val label: String = "",
+    val icon: Any? = null,
+    val destination: NavGraph = NavGraph.Setup
 ) {
     @Composable
-    fun bottomNavigationItems() : List<BottomNavigationItem> {
+    fun bottomNavigationItems(): List<BottomNavigationItem> {
         return listOf(
             BottomNavigationItem(
                 label = "Totem",
@@ -85,7 +84,17 @@ fun AppBottomNavBar(navController: NavHostController) {
                 label = { Text(navigationItem.label) },
                 icon = {
                     navigationItem.icon?.let { icon ->
-                        Icon(imageVector = icon, contentDescription = navigationItem.label)
+                        when (icon) {
+                            is ImageVector -> Icon(
+                                imageVector = icon,
+                                contentDescription = navigationItem.label
+                            )
+
+                            is Painter -> Icon(
+                                painter = icon,
+                                contentDescription = navigationItem.label
+                            )
+                        }
                     }
                 },
                 onClick = {
