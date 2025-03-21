@@ -64,9 +64,11 @@ fun MyAppTheme(content: @Composable () -> Unit) {
         onSecondary = AppColor.DarkGrey,
         tertiary = AppColor.Yellow,
         onTertiary = AppColor.DarkGrey,
+
         surface = AppColor.DarkGrey,
-        onSurface = AppColor.DarkGrey,
+        onSurface = AppColor.BrightGrey,
         background = AppColor.DarkGrey,
+        onBackground = AppColor.BrightGrey
     )
 
     MaterialTheme(
