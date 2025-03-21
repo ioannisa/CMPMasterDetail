@@ -19,17 +19,21 @@ import cmpmasterdetail.composeapp.generated.resources.Res
 import cmpmasterdetail.composeapp.generated.resources.car
 import cmpmasterdetail.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 
 
 object AppIcons {
+    // Painter using Image Resource
     val appLoco: Painter
         @Composable
         get() = painterResource(Res.drawable.compose_multiplatform)
 
-    val car: Painter
+    // ImageVector using Image Resource
+    val car: ImageVector
         @Composable
-        get() = painterResource(Res.drawable.car)
+        get() = vectorResource(Res.drawable.car)
 
+    // ImageVector using Icons Library
     val backArrow: ImageVector
         @Composable
         get() = Icons.AutoMirrored.Filled.ArrowBack
