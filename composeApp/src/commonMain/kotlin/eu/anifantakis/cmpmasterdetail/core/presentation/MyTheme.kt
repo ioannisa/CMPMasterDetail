@@ -1,8 +1,8 @@
 package eu.anifantakis.cmpmasterdetail.core.presentation
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -17,8 +17,11 @@ import cmpmasterdetail.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.Font
 
 object AppColor {
+    val White = Color(0xFFFFFFFF)
+    val Whiten = Color(0xFFF5F5F5)
     val BrightGrey = Color(0xFFC5C5C5)
     val Grey = Color(0xFFC4C4C4)
+    val MidGrey = Color(0xFF969696)
     val DarkGrey = Color(0xFF181818)
     val Yellow = Color(0xFFFFC000)
 }
