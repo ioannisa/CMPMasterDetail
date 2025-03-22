@@ -2,6 +2,7 @@ package eu.anifantakis.cmpmasterdetail.setup.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -10,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import eu.anifantakis.cmpmasterdetail.core.presentation.AppColor
 import eu.anifantakis.cmpmasterdetail.core.presentation.MyAppTheme
 import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.AppIcons
 import eu.anifantakis.cmpmasterdetail.core.presentation.composition_locals.LocalBottomBarState
@@ -138,6 +140,11 @@ fun SetupScreen() {
     MyAppTheme {
         SetupScreen(
             tabs = tabs,
+            activeColor = AppColor.White,
+            inactiveColor = AppColor.MidGrey,
+            backgroundColor = AppColor.DarkGrey,
+            indicatorColor = AppColor.Yellow,
+            tabsPadding = PaddingValues(horizontal = 8.dp),
             initialTabIndex = 0 // Start with the first tab selected
         )
     }

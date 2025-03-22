@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +40,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.anifantakis.cmpmasterdetail.core.presentation.AppColor
 import kotlinx.coroutines.launch
 
 /**
@@ -65,7 +65,11 @@ fun SetupScreen(
     tabs: List<DynamicTabItem>,
     modifier: Modifier = Modifier,
     initialTabIndex: Int = 0,
-    indicatorColor: Color = Color(0xFFFFD700),
+    backgroundColor: Color = Color(0xFF101010),
+    activeColor: Color = Color(0xFFFFFFFF),
+    inactiveColor: Color = Color(0xFF757575),
+    indicatorColor: Color = activeColor,
+    tabsPadding: PaddingValues = PaddingValues(0.dp),
     tabBarHeight: androidx.compose.ui.unit.Dp = 56.dp
 ) {
     require(tabs.isNotEmpty()) { "Tabs list cannot be empty" }
@@ -107,7 +111,7 @@ fun SetupScreen(
                 }
         }
 
-        Box(modifier = modifier.fillMaxSize().padding(horizontal = 8.dp)) {
+        Box(modifier = modifier.fillMaxSize()) {
             // Scrollable content
             Column(
                 modifier = Modifier
@@ -119,6 +123,7 @@ fun SetupScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(tabsPadding)
                             .onGloballyPositioned { coordinates ->
                                 sectionPositions[index] = coordinates.positionInParent().y
                                 sectionHeights[index] = coordinates.size.height
@@ -134,12 +139,12 @@ fun SetupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(tabBarHeight)
-                    .background(AppColor.DarkGrey)
+                    .background(backgroundColor)
             ) {
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
-                    contentColor = AppColor.White,
-                    containerColor = AppColor.DarkGrey,
+                    contentColor = activeColor,
+                    containerColor = backgroundColor,
                     // Indicator for selected tab
                     indicator = { tabPositions ->
                         Box(
@@ -209,14 +214,14 @@ fun SetupScreen(
                                     Icon(
                                         imageVector = tabItem.icon,
                                         contentDescription = null,
-                                        tint = if (selectedTabIndex == index) AppColor.White else AppColor.MidGrey,
+                                        tint = if (selectedTabIndex == index) activeColor else inactiveColor,
                                         modifier = Modifier.size(20.dp)
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
                                         text = tabItem.title,
                                         fontSize = 12.sp,
-                                        color = if (selectedTabIndex == index) AppColor.White else AppColor.MidGrey
+                                        color = if (selectedTabIndex == index) activeColor else inactiveColor
                                     )
                                 }
 
@@ -228,7 +233,7 @@ fun SetupScreen(
                                             .height(1.dp)
                                             .padding(horizontal = 6.dp)
                                             .background(
-                                                color = AppColor.MidGrey.copy(alpha = 0.5f),
+                                                color = inactiveColor,
                                                 shape = RoundedCornerShape(topStart = 1.dp, topEnd = 1.dp)
                                             )
                                     )
