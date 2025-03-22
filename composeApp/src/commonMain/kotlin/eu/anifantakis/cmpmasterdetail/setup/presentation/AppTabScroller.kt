@@ -88,7 +88,7 @@ fun SetupScreen(
         // Flag to track if scroll was triggered by tab click
         var isProgrammaticScroll by remember { mutableStateOf(false) }
 
-        LaunchedEffect(scrollState) {
+        LaunchedEffect(Unit) {
             snapshotFlow { scrollState.value }
                 .collect { currentScroll ->
                     // Only update selected tab based on scroll if not programmatic
