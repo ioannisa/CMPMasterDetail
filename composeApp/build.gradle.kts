@@ -90,7 +90,7 @@ kotlin {
 
             implementation(libs.material.icons.extended)
 
-            implementation("io.github.bvantur:inspektify-ktor3:1.0.0-beta08")
+            //implementation("io.github.bvantur:inspektify-ktor3:1.0.0-beta08")
         }
 
         iosMain.dependencies {

@@ -29,7 +29,7 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import sp.bvantur.inspektify.ktor.InspektifyKtor
+//import sp.bvantur.inspektify.ktor.InspektifyKtor
 import kotlin.coroutines.cancellation.CancellationException
 
 abstract class CommonHttpClient(
@@ -62,7 +62,7 @@ abstract class CommonHttpClient(
                 socketTimeoutMillis = socketTimeout
             }
 
-            install(InspektifyKtor)
+            //install(InspektifyKtor)
 
             if (logging) {
                 install(Logging) {
