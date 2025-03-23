@@ -5,12 +5,13 @@ import eu.anifantakis.cmpmasterdetail.app.global_state.domain.GlobalAction
 import eu.anifantakis.cmpmasterdetail.app.global_state.domain.GlobalState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
+import org.koin.mp.KoinPlatform.getKoin
 
 /**
  * BaseViewModel that provides global state management capabilities to all feature ViewModels
  */
 abstract class BaseGlobalViewModel(
-    protected val globalStateContainer: GlobalStateContainer
+    protected val globalStateContainer: GlobalStateContainer = getKoin().get<GlobalStateContainer>()
 ) : ViewModel() {
 
     // Direct access to global state

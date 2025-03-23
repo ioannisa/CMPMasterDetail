@@ -1,8 +1,8 @@
 package eu.anifantakis.cmpmasterdetail.movies.presentation.movies_list
 
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewModelScope
 import eu.anifantakis.cmpmasterdetail.app.global_state.presentation.BaseGlobalViewModel
-import eu.anifantakis.cmpmasterdetail.app.global_state.presentation.GlobalStateContainer
 import eu.anifantakis.cmpmasterdetail.core.data.preferences.Vault
 import eu.anifantakis.cmpmasterdetail.core.presentation.toComposeState
 import eu.anifantakis.cmpmasterdetail.movies.domain.Movie
@@ -17,13 +17,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.getValue
 
 class MoviesListViewModel(
-    globalStateContainer: GlobalStateContainer,
     private val repository: MoviesRepository,
     private val vault: Vault
-) : BaseGlobalViewModel(globalStateContainer) {
+) : BaseGlobalViewModel() {
 
     private var _state = MutableStateFlow(MoviesListState())
     val state by _state

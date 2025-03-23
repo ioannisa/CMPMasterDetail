@@ -68,6 +68,9 @@ fun AppContent() {
         ) {
             NavigationRoot(navController)
         }
-        AppLoadingIndicator(globalState.isLoading, true)
+        AppLoadingIndicator(
+            isLoading =  globalState.isLoading,
+            isCritical = true
+        )
     }
 }
