@@ -2,6 +2,7 @@ package eu.anifantakis.cmpmasterdetail.di
 
 import CMPMasterDetail.composeApp.BuildConfig
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import eu.anifantakis.cmpmasterdetail.app.global_state.presentation.GlobalStateContainer
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.scaffold.ScaffoldViewModel
 import eu.anifantakis.cmpmasterdetail.movies.data.MoviesRepositoryImpl
 import eu.anifantakis.cmpmasterdetail.movies.data.database.MoviesDatabase
@@ -12,7 +13,7 @@ import eu.anifantakis.cmpmasterdetail.movies.data.networking.MoviesHttpClient
 import eu.anifantakis.cmpmasterdetail.movies.domain.MoviesRepository
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.LocalMoviesDataSource
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.RemoteMoviesDataSource
-import eu.anifantakis.cmpmasterdetail.movies.presentation.MoviesListViewModel
+import eu.anifantakis.cmpmasterdetail.movies.presentation.movies_list.MoviesListViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -38,6 +39,9 @@ val sharedModule = module {
             .build()
     }
     single { get<MoviesDatabase>().moviesDao }
+
+    // Provide GlobalStateContainer as a singleton
+    single { GlobalStateContainer() }
 
     // Remote+Local Movies Datasource
     singleOf(::RemoteMoviesDataSourceImpl).bind<RemoteMoviesDataSource>()

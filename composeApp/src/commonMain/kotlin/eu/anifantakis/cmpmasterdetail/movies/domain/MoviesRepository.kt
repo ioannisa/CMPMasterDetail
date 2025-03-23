@@ -11,7 +11,7 @@ interface MoviesRepository {
     suspend fun fetchJustFromAPI(): List<Movie>
 
     // ROOM
-    fun getMovies(): Flow<List<Movie>>
+    fun getCachedMovies(): Flow<List<Movie>>
     suspend fun upsertMovie(movie: Movie): EmptyDataResult<DataError>
     suspend fun deleteMovie(id: MovieId)
 }

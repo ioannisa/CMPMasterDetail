@@ -1,4 +1,4 @@
-package eu.anifantakis.cmpmasterdetail.movies.presentation
+package eu.anifantakis.cmpmasterdetail.movies.presentation.movies_list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -63,11 +63,6 @@ fun MoviesListScreenRoot(
         onAction = viewModel::onAction
     )
 }
-
-
-
-
-
 
 @Composable
 private fun MoviesListScreen(

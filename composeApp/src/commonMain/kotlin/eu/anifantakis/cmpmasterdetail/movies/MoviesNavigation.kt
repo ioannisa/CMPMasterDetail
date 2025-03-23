@@ -17,8 +17,8 @@ import androidx.navigation.toRoute
 import eu.anifantakis.cmpmasterdetail.app.NavGraph
 import eu.anifantakis.cmpmasterdetail.core.presentation.sharedKoinViewModel
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.MovieId
-import eu.anifantakis.cmpmasterdetail.movies.presentation.MoviesListScreenRoot
-import eu.anifantakis.cmpmasterdetail.movies.presentation.MoviesListViewModel
+import eu.anifantakis.cmpmasterdetail.movies.presentation.movies_list.MoviesListScreenRoot
+import eu.anifantakis.cmpmasterdetail.movies.presentation.movies_list.MoviesListViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable

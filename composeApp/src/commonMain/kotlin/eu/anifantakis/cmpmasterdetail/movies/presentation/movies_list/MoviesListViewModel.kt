@@ -1,15 +1,15 @@
-package eu.anifantakis.cmpmasterdetail.movies.presentation
+package eu.anifantakis.cmpmasterdetail.movies.presentation.movies_list
 
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.anifantakis.cmpmasterdetail.app.global_state.presentation.BaseGlobalViewModel
+import eu.anifantakis.cmpmasterdetail.app.global_state.presentation.GlobalStateContainer
 import eu.anifantakis.cmpmasterdetail.core.data.preferences.Vault
 import eu.anifantakis.cmpmasterdetail.core.presentation.toComposeState
-import eu.anifantakis.cmpmasterdetail.core.presentation.ui.UiText
 import eu.anifantakis.cmpmasterdetail.movies.domain.Movie
 import eu.anifantakis.cmpmasterdetail.movies.domain.MoviesRepository
 import eu.anifantakis.cmpmasterdetail.movies.domain.datasource.MovieId
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -17,30 +17,13 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-sealed interface MoviesListIntent {
-    data object LoadMovies : MoviesListIntent
-    data object RefreshMovies : MoviesListIntent
-    data class SelectMovie(val movieId: MovieId) : MoviesListIntent
-}
-
-sealed interface MoviesListEffect {
-    data object MoviesListSuccess : MoviesListEffect
-    data class Error(val error: UiText) : MoviesListEffect
-    data class GotoMovieDetails(val movieId: MovieId) : MoviesListEffect
-}
-
-data class MoviesListState(
-    val isLoading: Boolean = false,
-    val isRefreshing: Boolean = false,
-    val movies: List<Movie> = emptyList(),
-    val selectedMovie: Movie? = null,
-)
+import androidx.compose.runtime.getValue
 
 class MoviesListViewModel(
+    globalStateContainer: GlobalStateContainer,
     private val repository: MoviesRepository,
     private val vault: Vault
-) : ViewModel() {
+) : BaseGlobalViewModel(globalStateContainer) {
 
     private var _state = MutableStateFlow(MoviesListState())
     val state by _state
@@ -58,7 +41,7 @@ class MoviesListViewModel(
         }
         .stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
+            SharingStarted.Companion.WhileSubscribed(5000L),
             _state.value
         )
         .toComposeState(viewModelScope)
@@ -91,41 +74,46 @@ class MoviesListViewModel(
     }
 
     private fun loadOfflineFirstAndObserve(shouldRefresh: Boolean = false) {
-        viewModelScope.launch {
-            _state.update { it.copy(
-                isRefreshing = shouldRefresh,
-                isLoading = !shouldRefresh
-            ) }
-
-            repository.getMovies()
-                .collect { movies ->
-                    _state.update { it.copy(movies = movies) }
-                }
+        if (shouldRefresh) {
+            viewModelScope.launch {
+                _state.update { it.copy(isRefreshing = true) }
+                repository.fetchMovies()
+                _state.update { it.copy(isRefreshing = false) }
+            }
         }
+        else {
+            viewModelScope.launch {
+                withLoading {
+                    collectMovies(repository.getCachedMovies()) // fetch from offline cache
+                    repository.fetchMovies()                    // fetch from network and upsert to offline cache
+                }
+            }
+        }
+    }
 
+    private fun collectMovies(moviesFlow: Flow<List<Movie>>) {
         viewModelScope.launch {
-            repository.fetchMovies()
-            _state.update {
-                if (shouldRefresh) it.copy(isRefreshing = false)
-                else it.copy(isLoading = false)
+            moviesFlow.collect { movies ->
+                _state.update { it.copy(movies = movies) }
             }
         }
     }
 
     private fun loadOnlyFromNetwork(shouldRefresh: Boolean = false) {
-        viewModelScope.launch {
-            _state.update { it.copy(
-                isRefreshing = shouldRefresh,
-                isLoading = !shouldRefresh
-            ) }
-
-            val movies = repository.fetchJustFromAPI()
-
-            _state.update { it.copy(
-                movies = movies,
-                isRefreshing = if (shouldRefresh) false else it.isRefreshing,
-                isLoading = if (shouldRefresh) it.isLoading else false
-            ) }
+        if (shouldRefresh) {
+            viewModelScope.launch {
+                _state.update { it.copy(isRefreshing = true) }
+                val movies = repository.fetchJustFromAPI()
+                _state.update { it.copy(movies = movies, isRefreshing = false) }
+            }
+        }
+        else {
+            viewModelScope.launch {
+                withLoading {
+                    val movies = repository.fetchJustFromAPI()
+                    _state.update { it.copy(movies = movies) }
+                }
+            }
         }
     }
 }

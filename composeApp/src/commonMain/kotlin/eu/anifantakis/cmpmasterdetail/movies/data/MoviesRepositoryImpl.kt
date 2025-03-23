@@ -33,7 +33,7 @@ class MoviesRepositoryImpl(
     }
 
     // Fetch from ROOM
-    override fun getMovies(): Flow<List<Movie>> {
+    override fun getCachedMovies(): Flow<List<Movie>> {
         return localDataSource.getMovies()
     }
 

@@ -14,7 +14,7 @@ class RemoteMoviesDataSourceImpl(
 ) : RemoteMoviesDataSource {
     override suspend fun getMovies(): DataResult<List<Movie>, DataError.Network> {
         return httpClient.get<MoviesDto>(
-            route = "/3/movie/top_rated"
+            route = "/3/movie/now_playing"
         ).map { moviesDto ->
             moviesDto.results.map { movieDto ->
                 movieDto.toMovie()
