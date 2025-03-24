@@ -12,8 +12,8 @@ fun MovieDto.toMovie(): Movie {
         overview = this.overview,
         releaseDate = this.releaseDate.toLocalDate(),
         voteAverage = voteAverage,
-        posterPath = posterPath,
-        backdropPath = backdropPath
+        posterPath = posterPath ?: backdropPath ?: "",
+        backdropPath = backdropPath ?: posterPath ?: ""
     )
 }
 

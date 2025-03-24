@@ -53,6 +53,7 @@ abstract class CommonHttpClient(
             install(ContentNegotiation) {
                 json(Json {
                     ignoreUnknownKeys = true
+                    coerceInputValues = true
                 })
             }
 

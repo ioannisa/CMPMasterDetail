@@ -26,6 +26,7 @@ import kotlin.reflect.KProperty
  */
 val defaultJson = Json {
     ignoreUnknownKeys = true
+    coerceInputValues = true
     isLenient = true
     encodeDefaults = true
     prettyPrint = false // More compact representation for storage efficiency
