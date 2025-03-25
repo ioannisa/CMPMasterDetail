@@ -129,9 +129,9 @@ android {
             isMinifyEnabled = false
         }
     }
+    flavorDimensions += listOf("mode")
 
 
-    flavorDimensions("mode")
     productFlavors {
         create("dev") {
             // Other Android-specific settings for the "dev" flavor.
