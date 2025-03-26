@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import eu.anifantakis.cmpmasterdetail.app.global_state.domain.GlobalState
 import eu.anifantakis.cmpmasterdetail.core.presentation.MyAppTheme
 import eu.anifantakis.cmpmasterdetail.core.presentation.ObserveEffects
 import eu.anifantakis.cmpmasterdetail.core.presentation.composition_locals.LocalBottomBarState
+import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.AppIcons
 import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.UIConst
 import eu.anifantakis.cmpmasterdetail.core.presentation.designsystem.components.AppBackground
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.PullToRefreshList
@@ -82,16 +84,36 @@ private fun MoviesListScreen(
             ) {
                 val bottomBarState = LocalBottomBarState.current
 
-                MultiTapTitle(
-                    title = "Movies - Battery: ${globalState.batteryLevel}%",
+                MultiTapItem(
                     onClick = {
                         println("MultiTap Secret Triggered")
                         bottomBarState.toggle()
                     }
-                )
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+
+                        Text(
+                            text = "Movies",
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        )
+
+                        Image(
+                            imageVector = AppIcons.battery, contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                            modifier = Modifier.size(24.dp)
+                        )
+
+                        Text(
+                            text = "${globalState.batteryLevel}%",
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        )
+                    }
+                }
 
                 PullToRefreshList(isRefreshing = state.isRefreshing, onRefresh = {
-                    onAction(MoviesListIntent.RefreshMovies)
+                onAction(MoviesListIntent.RefreshMovies)
                 }) {
                     LazyColumn {
                         items(
@@ -169,27 +191,24 @@ fun ThumbnailLoader(imagePath: String?) {
 }
 
 @Composable
-fun MultiTapTitle(
-    title: String,
-    onClick: () -> Unit
+fun MultiTapItem(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     var prvTapTime by remember { mutableStateOf<Long>(0) }
     var tapCount by remember { mutableIntStateOf(0) }
 
     val interactionSource = remember { MutableInteractionSource() }
-    Text(
-        text = title,
-        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
+    Box(
+        modifier = modifier // Apply modifier here (e.g., weight, padding from caller)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null
+                indication = null // No visual indication like ripple
             ) {
                 val currentTime = System.now().toEpochMilliseconds()
 
                 // Remove taps that are older than 1 second from the latest tap
-                val thresholdTime = prvTapTime - 1000L // 1000ms = 1 second
                 if (abs(currentTime - prvTapTime) < 1000) {
                     tapCount++
                     if (tapCount >= 7) {
@@ -201,5 +220,7 @@ fun MultiTapTitle(
                 }
                 prvTapTime = currentTime
             }
-    )
+    ) {
+        content()
+    }
 }

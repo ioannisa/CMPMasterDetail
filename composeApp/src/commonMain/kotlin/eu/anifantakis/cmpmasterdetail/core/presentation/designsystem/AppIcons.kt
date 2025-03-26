@@ -2,6 +2,7 @@ package eu.anifantakis.cmpmasterdetail.core.presentation.designsystem
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.BatteryStd
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Settings
@@ -37,6 +38,10 @@ object AppIcons {
     val backArrow: ImageVector
         @Composable
         get() = Icons.AutoMirrored.Filled.ArrowBack
+
+    val battery: ImageVector
+        @Composable
+        get() = Icons.Default.BatteryStd
 
     val settings: ImageVector
         @Composable
