@@ -90,6 +90,8 @@ kotlin {
 
             implementation(libs.material.icons.extended)
 
+            api(libs.compose.webview.multiplatform)
+
             //implementation("io.github.bvantur:inspektify-ktor3:1.0.0-beta08")
         }
 
