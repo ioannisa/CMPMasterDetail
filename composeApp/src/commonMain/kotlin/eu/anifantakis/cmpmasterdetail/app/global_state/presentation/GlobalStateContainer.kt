@@ -39,6 +39,10 @@ class GlobalStateContainer(initialState: GlobalState = GlobalState()) {
             is GlobalAction.HideLoading -> currentState.copy(
                 isLoading = false
             )
+
+            is GlobalAction.UpdateBatteryLevel -> currentState.copy(
+                batteryLevel = action.batteryLevel
+            )
         }
     }
 

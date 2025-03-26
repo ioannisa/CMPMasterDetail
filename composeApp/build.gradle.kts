@@ -101,6 +101,11 @@ kotlin {
         dependencies {
             ksp(libs.androidx.room.compiler)
         }
+
+        // don't show warning on expect/actual classes
+        compilerOptions {
+            freeCompilerArgs.add("-Xexpect-actual-classes")
+        }
     }
 }
 

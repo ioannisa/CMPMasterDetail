@@ -3,6 +3,7 @@ package eu.anifantakis.cmpmasterdetail.di
 import CMPMasterDetail.composeApp.BuildConfig
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import eu.anifantakis.cmpmasterdetail.app.global_state.presentation.GlobalStateContainer
+import eu.anifantakis.cmpmasterdetail.core.data.battery.BatteryManager
 import eu.anifantakis.cmpmasterdetail.core.presentation.ui.base.scaffold.ScaffoldViewModel
 import eu.anifantakis.cmpmasterdetail.movies.data.MoviesRepositoryImpl
 import eu.anifantakis.cmpmasterdetail.movies.data.database.MoviesDatabase
@@ -39,6 +40,8 @@ val sharedModule = module {
             .build()
     }
     single { get<MoviesDatabase>().moviesDao }
+
+    single { get<BatteryManager>() }
 
     // Provide GlobalStateContainer as a singleton
     single { GlobalStateContainer() }

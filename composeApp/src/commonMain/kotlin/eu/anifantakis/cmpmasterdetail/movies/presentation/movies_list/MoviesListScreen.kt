@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import cmpmasterdetail.composeapp.generated.resources.Res
 import cmpmasterdetail.composeapp.generated.resources.compose_multiplatform
 import coil3.compose.rememberAsyncImagePainter
+import eu.anifantakis.cmpmasterdetail.app.global_state.domain.GlobalState
 import eu.anifantakis.cmpmasterdetail.core.presentation.MyAppTheme
 import eu.anifantakis.cmpmasterdetail.core.presentation.ObserveEffects
 import eu.anifantakis.cmpmasterdetail.core.presentation.composition_locals.LocalBottomBarState
@@ -60,6 +61,7 @@ fun MoviesListScreenRoot(
 
     MoviesListScreen(
         state = viewModel.state,
+        globalState = viewModel.globalUiState,
         onAction = viewModel::onAction
     )
 }
@@ -67,6 +69,7 @@ fun MoviesListScreenRoot(
 @Composable
 private fun MoviesListScreen(
     state: MoviesListState,
+    globalState: GlobalState,
     onAction: (MoviesListIntent) -> Unit,
 ) {
     MyAppTheme {
@@ -80,7 +83,7 @@ private fun MoviesListScreen(
                 val bottomBarState = LocalBottomBarState.current
 
                 MultiTapTitle(
-                    title = "Movies",
+                    title = "Movies - Battery: ${globalState.batteryLevel}%",
                     onClick = {
                         println("MultiTap Secret Triggered")
                         bottomBarState.toggle()

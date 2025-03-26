@@ -1,5 +1,6 @@
 package eu.anifantakis.cmpmasterdetail.di
 
+import eu.anifantakis.cmpmasterdetail.core.data.battery.BatteryManager
 import eu.anifantakis.cmpmasterdetail.core.data.preferences.Vault
 import eu.anifantakis.cmpmasterdetail.movies.data.database.MoviesDatabaseFactory
 import io.ktor.client.engine.HttpClientEngine
@@ -16,6 +17,10 @@ actual val platformModule: Module
 
         single<Vault> {
             Vault(androidApplication())
+        }
+
+        single<BatteryManager> {
+            BatteryManager(androidApplication())
         }
 
         single { MoviesDatabaseFactory(androidApplication()) }
