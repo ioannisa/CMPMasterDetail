@@ -39,7 +39,7 @@ val sharedModule = module {
             .setDriver(BundledSQLiteDriver())
             .build()
     }
-    single { get<MoviesDatabase>().moviesDao }
+    single { get<MoviesDatabase>().moviesDao } // singleOf(MoviesDatabase::moviesDao)
 
     single { get<BatteryManager>() }
 

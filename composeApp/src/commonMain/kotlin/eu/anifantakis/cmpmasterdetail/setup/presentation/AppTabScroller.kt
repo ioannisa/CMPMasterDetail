@@ -25,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,8 +37,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 
 /**
@@ -60,8 +62,9 @@ data class DynamicTabItem(
  * @param indicatorColor The color of the selected tab indicator (default: Yellow)
  * @param tabBarHeight The height of the tab bar (default: 56.dp)
  */
+@OptIn(FlowPreview::class)
 @Composable
-fun SetupScreen(
+fun AppTabScroller(
     tabs: List<DynamicTabItem>,
     modifier: Modifier = Modifier,
     initialTabIndex: Int = 0,
@@ -73,38 +76,47 @@ fun SetupScreen(
     tabBarHeight: androidx.compose.ui.unit.Dp = 56.dp
 ) {
     require(tabs.isNotEmpty()) { "Tabs list cannot be empty" }
+    val density = LocalDensity.current
 
     Box {
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
         var selectedTabIndex by rememberSaveable { mutableStateOf(initialTabIndex.coerceIn(0, tabs.size - 1)) }
 
-        // Track section positions and heights
-        val sectionPositions = remember { mutableStateListOf<Float>() }
-        val sectionHeights = remember { mutableStateListOf<Int>() }
+        val sectionPositions = remember(tabs.size) { MutableList(tabs.size) { 0f } }
+        val sectionHeights = remember(tabs.size) { MutableList(tabs.size) { 0 } }
 
-        // Initialize positions tracking
-        while (sectionPositions.size < tabs.size) {
-            sectionPositions.add(0f)
-            sectionHeights.add(0)
-        }
+        var tabsHaveBeenMeasured by remember { mutableStateOf(false) }
 
         // Flag to track if scroll was triggered by tab click
         var isProgrammaticScroll by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
+            // Define a small threshold for "close enough" to the end
+            val endScrollThreshold = with(density) { 64.dp.toPx() }
+
             snapshotFlow { scrollState.value }
+                .sample(100L) // collect no faster than every 100ms
                 .collect { currentScroll ->
                     // Only update selected tab based on scroll if not programmatic
                     if (!isProgrammaticScroll) {
-                        for (i in sectionPositions.indices) {
-                            if (currentScroll >= sectionPositions[i] &&
-                                (i == sectionPositions.lastIndex || currentScroll < sectionPositions[i + 1])
-                            ) {
-                                if (selectedTabIndex != i) {
-                                    selectedTabIndex = i
+                        // First check if we've reached the end of the scrollable content
+                        if (scrollState.value >= scrollState.maxValue - endScrollThreshold) {
+                            // We've reached the bottom, always select the last tab
+                            if (selectedTabIndex != tabs.lastIndex) {
+                                selectedTabIndex = tabs.lastIndex
+                            }
+                        } else {
+                            // Normal tab selection logic based on scroll position
+                            for (i in sectionPositions.indices) {
+                                if (currentScroll >= sectionPositions[i] &&
+                                    (i == sectionPositions.lastIndex || currentScroll < sectionPositions[i + 1])
+                                ) {
+                                    if (selectedTabIndex != i) {
+                                        selectedTabIndex = i
+                                    }
+                                    break
                                 }
-                                break
                             }
                         }
                     }
@@ -124,9 +136,21 @@ fun SetupScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(tabsPadding)
-                            .onGloballyPositioned { coordinates ->
-                                sectionPositions[index] = coordinates.positionInParent().y
-                                sectionHeights[index] = coordinates.size.height
+                            .let {
+                                if (!tabsHaveBeenMeasured) {
+                                    it.onGloballyPositioned { coordinates ->
+                                        sectionPositions[index] = coordinates.positionInParent().y
+                                        sectionHeights[index] = coordinates.size.height
+                                        println("POSITIONING")
+
+                                        // Once all tabs have been measured, never measure again
+                                        if (index == tabs.lastIndex) {
+                                            tabsHaveBeenMeasured = true
+                                        }
+                                    }
+                                } else {
+                                    it
+                                }
                             }
                     ) {
                         tabItem.content()
@@ -182,11 +206,11 @@ fun SetupScreen(
 
                                             // Base duration plus additional time based on distance
                                             val baseDuration = 200 // minimum duration in milliseconds
-                                            val distanceFactor = 0.1f // milliseconds per pixel
+                                            val distanceFactor = 0.2f // milliseconds per pixel
                                             val calculatedDuration = (baseDuration + (distanceToScroll * distanceFactor)).toInt()
 
                                             // Keep duration within reasonable bounds
-                                            val animationDuration = calculatedDuration.coerceIn(300, 1500)
+                                            val animationDuration = calculatedDuration.coerceIn(200, 1500)
 
                                             scrollState.animateScrollTo(
                                                 value = targetPosition,
@@ -220,7 +244,7 @@ fun SetupScreen(
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
                                         text = tabItem.title,
-                                        fontSize = 12.sp,
+                                        fontSize = 10.sp,
                                         color = if (selectedTabIndex == index) activeColor else inactiveColor
                                     )
                                 }

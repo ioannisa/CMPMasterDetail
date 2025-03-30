@@ -141,7 +141,7 @@ fun SetupScreen() {
 
     // Use the dynamic tab screen component
     MyAppTheme {
-        SetupScreen(
+        AppTabScroller(
             tabs = tabs,
             activeColor = AppColor.White,
             inactiveColor = AppColor.MidGrey,
