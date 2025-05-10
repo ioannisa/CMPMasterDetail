@@ -64,6 +64,7 @@ fun AppBottomNavBar(navController: NavHostController) {
             navController.graph.findStartDestination().route?.let { startRoute ->
                 navController.popAndNavigate(
                     popTo = startRoute,
+                    inclusive = false,
                     navigate = destination
                 )
             }
